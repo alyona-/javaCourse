@@ -9,7 +9,6 @@ public class App {
         printResults(people);
     }
 
-
     private static void processPurchases(Scanner scanner, Map<String, Person> people, Map<String, Product> products) {
         System.out.println("\nВыбирайте покупки (например: Павел - Хлеб). Завершите ввод словом END:");
         while (true) {
@@ -17,7 +16,7 @@ public class App {
             if (input.equalsIgnoreCase("END")) break;
             if (!input.contains("-")) continue;
 
-            String[] parts = input.split("-");
+            String[] parts = input.split("-", 2);
             if (parts.length != 2) continue;
 
             String personName = parts[0].trim();
@@ -41,9 +40,7 @@ public class App {
 
     private static void printResults(Map<String, Person> people) {
         for (Person person : people.values()) {
-            System.out.println(person); // person.toString() переопределён
+            System.out.println(person);
         }
     }
-
-
 }

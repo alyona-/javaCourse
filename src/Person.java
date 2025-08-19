@@ -8,51 +8,42 @@ import java.util.Scanner;
 public class Person {
     private String name;
     private double money;
-    private List<Product> products = new ArrayList<>();
+    private final List<Product> products = new ArrayList<>();
 
     public Person(String name, double money) {
         setName(name);
         setMoney(money);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public double getMoney() {
-        return money;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
+    public String getName() { return name; }
+    public double getMoney() { return money; }
+    public List<Product> getProducts() { return products; }
 
     public void setName(String name) {
-        if (name == null || name.trim().isEmpty()) {
+        if (name == null || name.trim().isEmpty())
             throw new IllegalArgumentException("Имя не может быть пустым");
-        }
-        if (name.trim().length() < 3) {
+        String n = name.trim();
+        if (n.length() < 3)
             throw new IllegalArgumentException("Имя не может быть короче 3 символов");
-        }
-        this.name = name.trim();
+        this.name = n;
     }
 
     public void setMoney(double money) {
-        if (money < 0) {
+        if (money < 0)
             throw new IllegalArgumentException("Деньги не могут быть отрицательными");
-        }
         this.money = money;
     }
 
     public void buy(Product product) {
         if (product == null) return;
+        double price = product.getPrice(); // полиморфно: для DiscountProduct учтёт скидку
 
-        if (this.money >= product.getPrice()) {
-            this.money -= product.getPrice();
+        if (this.money >= price) {
+            this.money -= price;
             this.products.add(product);
-            System.out.println(this.name + " купил " + product.getName());
+            System.out.println(this.name + " купил " + product.getName() + " за " + format(price));
         } else {
-            System.out.println(this.name + " не может позволить себе " + product.getName());
+            System.out.println(this.name + " не может позволить себе " + product.getName() + " (нужно " + format(price) + ")");
         }
     }
 
@@ -76,32 +67,29 @@ public class Person {
     }
 
     public static Person parse(String input) {
-        if (!input.contains("=")) {
+        if (input == null || !input.contains("="))
             throw new IllegalArgumentException("Неверный формат покупателя. Пример: Иван = 100");
-        }
         String[] parts = input.split("=", 2);
-        if (parts.length != 2) {
-            throw new IllegalArgumentException("Неверный формат покупателя. Пример: Иван = 100");
-        }
         String name = parts[0].trim();
         double money;
         try {
-            money = Double.parseDouble(parts[1].trim());
+            money = Double.parseDouble(parts[1].trim().replace(",", "."));
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Неверный формат суммы для " + name);
         }
         return new Person(name, money);
     }
 
+    private static String format(double v) {
+        if (Math.abs(v - Math.rint(v)) < 1e-9) return String.valueOf((long)Math.rint(v));
+        return String.format(java.util.Locale.US, "%.2f", v);
+    }
+
     @Override
     public String toString() {
-        if (products.isEmpty()) {
-            return name + " - Ничего не куплено";
-        }
+        if (products.isEmpty()) return name + " - Ничего не куплено";
         List<String> names = new ArrayList<>();
-        for (Product p : products) {
-            names.add(p.getName());
-        }
+        for (Product p : products) names.add(p.getName());
         return name + " - " + String.join(", ", names);
     }
 
@@ -114,7 +102,5 @@ public class Person {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
+    public int hashCode() { return Objects.hash(name); }
 }
