@@ -1,3 +1,6 @@
+--Если раскоментировать truncate то можно использовать как отдельный скрипт перезаписи, но мне не нужно так
+--как я каждый раз пересоздаю таблицу
+--truncate table public.order_status cascade;
 INSERT INTO public.order_status (id, name) VALUES
 (1,'NEW'),
 (2,'PAID'),
@@ -12,6 +15,7 @@ INSERT INTO public.order_status (id, name) VALUES
 ON CONFLICT DO NOTHING;
 
 -- Товары
+--truncate table public.product cascade;
 INSERT INTO public.product (description, price, quantity, category) VALUES
 ('Ноутбук 14"',     69990, 15,  'electronics'),
 ('Смартфон X',      49990, 40,  'electronics'),
@@ -25,6 +29,7 @@ INSERT INTO public.product (description, price, quantity, category) VALUES
 ('Клавиатура мех.',  4990, 50,  'electronics');
 
 -- Покупатели
+--truncate table public.customer cascade;
 INSERT INTO public.customer (first_name, last_name, phone, email) VALUES
 ('Анна',  'Соколова',  '+7-900-111-11-01', 'anna1@example.com'),
 ('Борис', 'Иванов',    '+7-900-111-11-02', 'boris2@example.com'),
@@ -45,6 +50,7 @@ VALUES
 ON CONFLICT (email) DO NOTHING;
 
 -- Заказы
+--truncate table public."order" cascade;
 INSERT INTO public."order" (product_id, customer_id, order_date, quantity, status_id) VALUES
 (1, 1,  NOW() - INTERVAL '1 day',    1, 1),
 (2, 2,  NOW() - INTERVAL '2 days',   2, 2),

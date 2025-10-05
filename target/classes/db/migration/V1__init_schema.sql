@@ -1,8 +1,8 @@
 -- Удаляю старые версии таблиц, если есть (с учётом зарезервированного "order")
---DROP TABLE IF EXISTS public."order" CASCADE;
---DROP TABLE IF EXISTS public.order_status CASCADE;
---DROP TABLE IF EXISTS public.customer CASCADE;
---DROP TABLE IF EXISTS public.product CASCADE;
+DROP TABLE IF EXISTS public."order" CASCADE;
+DROP TABLE IF EXISTS public.order_status CASCADE;
+DROP TABLE IF EXISTS public.customer CASCADE;
+DROP TABLE IF EXISTS public.product CASCADE;
 
 CREATE TABLE IF NOT EXISTS public.product (
 id              BIGSERIAL PRIMARY KEY,
